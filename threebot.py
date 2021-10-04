@@ -61,7 +61,6 @@ conn.start()
 conn.is_ready()
 print('Connected!')
 
-
 # define player functions
 
 ffmpeg_proc = None
