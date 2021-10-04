@@ -91,6 +91,10 @@ def audio_thread():
 audio_thread_obj = threading.Thread(target=audio_thread, daemon=True)
 audio_thread_obj.start()
 
+# init sound history
+HISTORY_LEN = 6
+history = []
+
 def play_sound(name):
     filepath = 'sounds/%s.mp3' % name
 
@@ -102,6 +106,10 @@ def play_sound(name):
     #command = ['ffmpeg', '-i', filepath, '-f', 'pulse', '-device', 'playback-device', 'threebot']
     print('Playing %s' % filepath)
     sp.run(command, check=True)
+
+    history.append(name)
+    while len(history) > HISTORY_LEN:
+        history.pop(0)
 
 # define alias lookup
 
@@ -197,6 +205,8 @@ def message_callback(data, depth=0):
                 reply('No links!')
             else:
                 conn.my_channel().send_text_message('A gift from <a href="{0}">{1}</a>'.format(row[1], row[0]))
+        elif parts[0] == 'history':
+            reply('Recent sounds: {}'.format(', '.join(reversed(history))))
         elif parts[0] == 'help':
             resp = '<table><tr><th>Command</th><th>Description</th><th>Usage</th></tr>'
 
@@ -259,6 +269,11 @@ def message_callback(data, depth=0):
                 {
                     'name': 'stopall',
                     'desc': 'Stops any currently playing sounds.',
+                    'usage': '',
+                },
+                {
+                    'name': 'history',
+                    'desc': 'Lists recently played sounds.',
                     'usage': '',
                 },
             ]
