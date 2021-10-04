@@ -205,6 +205,23 @@ def message_callback(data, depth=0):
                 reply('No links!')
             else:
                 conn.my_channel().send_text_message('A gift from <a href="{0}">{1}</a>'.format(row[1], row[0]))
+        elif parts[0] == 'yt':
+            # choose a random youtube link 
+
+            while True:
+                c = db.cursor()
+                c.execute('SELECT * FROM links ORDER BY random() LIMIT 1')
+
+                row = c.fetchone()
+
+                if row is None:
+                    reply('No links!')
+                    break
+                else:
+                    if 'youtube.com' in row[1]:
+                        conn.my_channel().send_text_message('A gift from <a href="{0}">{1}</a>'.format(row[1], row[0]))
+                    else:
+                        continue
         elif parts[0] == 'history':
             reply('Recent sounds: {}'.format(', '.join(reversed(history))))
         elif parts[0] == 'help':
@@ -274,6 +291,11 @@ def message_callback(data, depth=0):
                 {
                     'name': 'history',
                     'desc': 'Lists recently played sounds.',
+                    'usage': '',
+                },
+                {
+                    'name': 'yt',
+                    'desc': 'Gets a random link (Youtube only) and sends it to the channel.',
                     'usage': '',
                 },
             ]
