@@ -256,6 +256,11 @@ def message_callback(data, depth=0):
                     'desc': 'Lists available sounds, or gets information on a specific sound.',
                     'usage': '[Sound]',
                 },
+                {
+                    'name': 'stopall',
+                    'desc': 'Stops any currently playing sounds.',
+                    'usage': '',
+                },
             ]
 
             if len(parts) > 1:
@@ -421,6 +426,9 @@ def message_callback(data, depth=0):
             reply('Created new clip {0}.'.format(name))
             data.message = '!s %s' % name
             return message_callback(data, depth + 1)
+        elif parts[0] == 'stopall':
+            os.system('killall mpg123')
+            reply('Stopping all sounds.')
         else:
             # try and lookup an alias
             res = lookup_alias(parts[0])
