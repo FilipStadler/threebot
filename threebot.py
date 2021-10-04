@@ -5,7 +5,6 @@
 import argparse
 import os
 import pymumble_py3 as pymumble
-import pyttsx3
 import pyaudio
 import random
 import re
@@ -34,9 +33,6 @@ parser.add_argument('--name', default=NAME, help='Name to connect as')
 parser.add_argument('--pw', default=PASS, help='Connection password')
 
 args = parser.parse_args()
-
-# start TTS engine
-engine = pyttsx3.init()
 
 # connect to db
 
@@ -278,33 +274,6 @@ def message_callback(data, depth=0):
 
             resp += '</table>'
             reply(resp)
-        elif parts[0] == 'say':
-            if len(parts) < 2:
-                raise Exception('say: expected argument')
-
-            inp = ' '.join(parts[1:])
-
-            try:
-                os.remove(TMP_VOICEFILE)
-            except OSError:
-                pass
-
-            # write TTS
-            engine.stop()
-            engine.save_to_file(inp, TMP_VOICEFILE)
-            engine.runAndWait()
-
-            # Send audio
-            
-            command = ['ffmpeg', '-i', TMP_VOICEFILE, '-ac', '1', '-f', 's16le', '-ar', '48000', '-filter:a', 'loudnorm', '-filter:a', 'volume=0.4', '-']
-            sound = sp.run(command, capture_output=True, check=True).stdout
-            conn.sound_output.add_sound(sound)
-
-            try:
-                os.remove(TMP_VOICEFILE)
-            except OSError:
-                pass
-            
         elif parts[0] == 's':
             to_play = None
 
