@@ -51,6 +51,7 @@ c.execute('CREATE TABLE IF NOT EXISTS links ( dest TEXT UNIQUE, author TEXT, tim
 c.execute('CREATE TABLE IF NOT EXISTS aliases ( commandname TEXT UNIQUE, action TEXT, author TEXT, timestamp DATETIME )')
 c.execute('CREATE TABLE IF NOT EXISTS sounds ( soundname TEXT UNIQUE, author TEXT, timestamp DATETIME )')
 c.execute('CREATE TABLE IF NOT EXISTS greetings ( username TEXT UNIQUE, greeting TEXT )')
+c.execute('CREATE TABLE IF NOT EXISTS groups ( groupname TEXT UNIQUE, content TEXT, author TEXT, timestamp DATETIME )')
 
 # start connection
 
@@ -259,6 +260,11 @@ def message_callback(data, depth=0):
                     'usage': '[Sound]',
                 },
                 {
+                    'name': 'groupadd',
+                    'desc': 'Adds a sound to a group.',
+                    'usage': '[group] [sound]',
+                },
+                {
                     'name': 'help',
                     'desc': 'Lists commands, or gets information on a certain command.',
                     'usage': '[Command]',
@@ -329,6 +335,39 @@ def message_callback(data, depth=0):
 
             reply('Playing {0}.'.format(to_play))
             play_sound(to_play)
+        elif parts[0] == 'gplay':
+            if len(parts) < 2:
+                raise Exception('gplay: expected argument')
+
+            # select a random sound
+            c = db.cursor()
+            c.execute('SELECT content FROM groups ORDER BY random() LIMIT 1')
+            to_play = random.choice(c.fetchone()[0].split(':'))
+
+            # check if sound is valid code
+            c.execute('SELECT * FROM sounds WHERE soundname=?', [to_play])
+
+            if len(c.fetchall()) > 0:
+                play_sound(to_play)
+            else:
+                # try and resolve as an alias
+                c.execute('SELECT * FROM aliases WHERE commandname=?', [to_play])
+
+                r2 = c.fetchall()
+
+                if len(r2) == 0:
+                    reply('Error in gplay: "{0}" is not a recognized sound or alias'.format(to_play))
+                else:
+                    # check that the alias plays a sound
+                    action = r2[0][1].split(' ')
+
+                    if action[0] != '!s':
+                        reply('Error in greeting: "{0}" aliases to "{1}" which does not play a sound'.format(to_play, r2[0][1]))
+                    else:
+                        play_sound(action[1])
+
+            reply('Playing {0}.'.format(to_play))
+            play_sound(to_play)
         elif parts[0] == 'alias':
             if len(parts) < 3:
                 raise Exception('alias: expected 2 arguments, found {0}'.format(len(parts) - 1))
@@ -364,6 +403,49 @@ def message_callback(data, depth=0):
             else:
                 c.execute('DELETE FROM greetings WHERE username=?', [author])
                 reply('Removed greeting.')
+        elif parts[0] == 'groupadd':
+            c = db.cursor()
+
+            if len(parts) < 3:
+                raise Exception('groupadd: expected [group] [sound]')
+
+            if ':' in parts[2]:
+                raise Exception('groupadd: no codes with \':\' allowed')
+
+            c.execute('SELECT content FROM groups WHERE groupname=?', [parts[1]])
+
+            res = c.fetchall()
+
+            if len(res) == 0:
+                c.execute('INSERT INTO greetings VALUES (?, ?, ?, NOW)', [parts[1], parts[2], author])
+                reply('Created new group {}'.format(parts[1]))
+            else:
+                new_content = ','.join(res[0][0].split(':') + [parts[2]])
+                c.execute('UPDATE groups SET content=? WHERE groupname=?', [new_content, parts[1]])
+                reply('Added {} to group {}.', parts[2], parts[1])
+        elif parts[0] == 'groupdel':
+            c = db.cursor()
+
+            if len(parts) < 3:
+                raise Exception('groupdel: expected [group] [sound]')
+
+            if ':' in parts[2]:
+                raise Exception('groupdel: no codes with \':\' allowed')
+
+            c.execute('SELECT content FROM groups WHERE groupname=?', [parts[1]])
+
+            res = c.fetchall()
+
+            if len(res) == 0:
+                reply('Group {} not found'.format(parts[2]))
+            else:
+                new_content = ','.join(res[0][0].split(':').remove(parts[2]))
+
+                if new_content == res[0][0]:
+                    raise Exception('groupdel: {} not in group {}'.format(parts[2], parts[1]))
+
+                c.execute('UPDATE groups SET content=? WHERE groupname=?', [new_content, parts[1]])
+                reply('Removed {} from group {}.', parts[2], parts[1])
         elif parts[0] == 'delsound':
             # delete a sound
 
