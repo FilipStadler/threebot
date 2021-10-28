@@ -1,0 +1,4 @@
+build
+dist
+threebot/threebot.egg-info
+**/__pycache__
