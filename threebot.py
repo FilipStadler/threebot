@@ -442,7 +442,9 @@ def message_callback(data, depth=0):
             if len(res) == 0:
                 reply('Group {} not found'.format(parts[2]))
             else:
-                new_content = ':'.join(res[0][0].split(':').remove(parts[2]))
+                old_content = res[0][0].split(':')
+                old_content.remove(parts[2])
+                new_content = ':'.join(old_content)
 
                 if new_content == res[0][0]:
                     raise Exception('groupdel: {} not in group {}'.format(parts[2], parts[1]))
