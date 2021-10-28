@@ -449,8 +449,13 @@ def message_callback(data, depth=0):
                 if new_content == res[0][0]:
                     raise Exception('groupdel: {} not in group {}'.format(parts[2], parts[1]))
 
-                c.execute('UPDATE groups SET content=? WHERE groupname=?', [new_content, parts[1]])
-                reply('Removed {} from group {}.'.format(parts[2], parts[1]))
+                if len(new_content) > 0:
+                    c.execute('UPDATE groups SET content=? WHERE groupname=?', [new_content, parts[1]])
+                    reply('Removed {} from group {}.'.format(parts[2], parts[1]))
+                else:
+                    c.execute('DELETE FROM groups WHERE groupname=?', [parts[1]])
+
+                db.commit()
         elif parts[0] == 'delsound':
             # delete a sound
 
