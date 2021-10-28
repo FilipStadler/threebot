@@ -450,7 +450,7 @@ def message_callback(data, depth=0):
                     raise Exception('groupdel: {} not in group {}'.format(parts[2], parts[1]))
 
                 c.execute('UPDATE groups SET content=? WHERE groupname=?', [new_content, parts[1]])
-                reply('Removed {} from group {}.', parts[2], parts[1])
+                reply('Removed {} from group {}.'.format(parts[2], parts[1]))
         elif parts[0] == 'delsound':
             # delete a sound
 
