@@ -451,9 +451,6 @@ def message_callback(data, depth=0):
 
                 new_content = ':'.join(old_content)
 
-                if new_content == res[0][0]:
-                    raise Exception('groupdel: {} not in group {}'.format(parts[2], parts[1]))
-
                 if len(new_content) > 0:
                     c.execute('UPDATE groups SET content=? WHERE groupname=?', [new_content, parts[1]])
                     reply('Removed {} from group {}.'.format(parts[2], parts[1]))
