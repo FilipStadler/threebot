@@ -443,7 +443,12 @@ def message_callback(data, depth=0):
                 reply('Group {} not found'.format(parts[2]))
             else:
                 old_content = res[0][0].split(':')
-                old_content.remove(parts[2])
+
+                if parts[2] in old_content:
+                    old_content.remove(parts[2])
+                else:
+                    reply('WARNING: {} not in group'.format(parts[2]))
+
                 new_content = ':'.join(old_content)
 
                 if new_content == res[0][0]:
