@@ -99,6 +99,10 @@ history = []
 def play_sound(name):
     filepath = 'sounds/%s.mp3' % name
 
+    history.append(name)
+    while len(history) > HISTORY_LEN:
+        history.pop(0)
+
     if not os.path.exists(filepath):
         raise Exception('File "{0}" not found.'.format(filepath))
 
@@ -107,10 +111,6 @@ def play_sound(name):
     #command = ['ffmpeg', '-i', filepath, '-f', 'pulse', '-device', 'playback-device', 'threebot']
     print('Playing %s' % filepath)
     sp.run(command, check=True)
-
-    history.append(name)
-    while len(history) > HISTORY_LEN:
-        history.pop(0)
 
 # define alias lookup
 
@@ -221,6 +221,7 @@ def message_callback(data, depth=0):
                 else:
                     if 'youtube.com' in row[1]:
                         conn.my_channel().send_text_message('A gift from <a href="{0}">{1}</a>'.format(row[1], row[0]))
+                        break
                     else:
                         continue
         elif parts[0] == 'history':
@@ -341,13 +342,14 @@ def message_callback(data, depth=0):
 
             # select a random sound
             c = db.cursor()
-            c.execute('SELECT content FROM groups ORDER BY random() LIMIT 1')
+            c.execute('SELECT content FROM groups WHERE groupname=?', [parts[1]])
             to_play = random.choice(c.fetchone()[0].split(':'))
 
             # check if sound is valid code
             c.execute('SELECT * FROM sounds WHERE soundname=?', [to_play])
 
             if len(c.fetchall()) > 0:
+                reply('Playing {0}.'.format(to_play))
                 play_sound(to_play)
             else:
                 # try and resolve as an alias
@@ -362,12 +364,10 @@ def message_callback(data, depth=0):
                     action = r2[0][1].split(' ')
 
                     if action[0] != '!s':
-                        reply('Error in greeting: "{0}" aliases to "{1}" which does not play a sound'.format(to_play, r2[0][1]))
+                        reply('Error in gplay: "{0}" aliases to "{1}" which does not play a sound'.format(to_play, r2[0][1]))
                     else:
+                        reply('Playing {0}.'.format(action[1]))
                         play_sound(action[1])
-
-            reply('Playing {0}.'.format(to_play))
-            play_sound(to_play)
         elif parts[0] == 'alias':
             if len(parts) < 3:
                 raise Exception('alias: expected 2 arguments, found {0}'.format(len(parts) - 1))
@@ -398,6 +398,7 @@ def message_callback(data, depth=0):
                     c.execute('INSERT INTO greetings VALUES (?, ?)', [author, parts[1]])
                 else:
                     c.execute('UPDATE greetings SET greeting=? WHERE username=?', [parts[1], author])
+                    db.commit()
 
                 reply('Set greeting to {0}.'.format(parts[1]))
             else:
@@ -417,12 +418,14 @@ def message_callback(data, depth=0):
             res = c.fetchall()
 
             if len(res) == 0:
-                c.execute('INSERT INTO greetings VALUES (?, ?, ?, NOW)', [parts[1], parts[2], author])
+                c.execute('INSERT INTO groups VALUES (?, ?, ?, datetime("NOW"))', [parts[1], parts[2], author])
+                db.commit()
                 reply('Created new group {}'.format(parts[1]))
             else:
-                new_content = ','.join(res[0][0].split(':') + [parts[2]])
+                new_content = ':'.join(res[0][0].split(':') + [parts[2]])
                 c.execute('UPDATE groups SET content=? WHERE groupname=?', [new_content, parts[1]])
-                reply('Added {} to group {}.', parts[2], parts[1])
+                db.commit()
+                reply('Added {} to group {}.'.format(parts[2], parts[1]))
         elif parts[0] == 'groupdel':
             c = db.cursor()
 
@@ -439,7 +442,7 @@ def message_callback(data, depth=0):
             if len(res) == 0:
                 reply('Group {} not found'.format(parts[2]))
             else:
-                new_content = ','.join(res[0][0].split(':').remove(parts[2]))
+                new_content = ':'.join(res[0][0].split(':').remove(parts[2]))
 
                 if new_content == res[0][0]:
                     raise Exception('groupdel: {} not in group {}'.format(parts[2], parts[1]))
@@ -484,6 +487,14 @@ def message_callback(data, depth=0):
             rows = c.fetchall()
 
             for m in split_table(['Alias', 'Action', 'Author', 'Created'], rows):
+                reply(m)
+        elif parts[0] == 'groups':
+            # query all groups
+            c = db.cursor()
+            c.execute('SELECT * FROM groups ORDER BY groupname')
+            rows = c.fetchall()
+
+            for m in split_table(['Groupname', 'Sounds', 'Author', 'Created'], rows):
                 reply(m)
         elif parts[0] == 'sounds':
             c = db.cursor()
