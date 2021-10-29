@@ -28,8 +28,6 @@ parser.add_argument('--pw', default=PASS, help='Connection password')
 
 args = parser.parse_args()
 
-
-
 def run():
     # Connect to server.
     print('Connecting to {0}:{1} as {2}'.format(args.host, args.port, args.name))
@@ -107,7 +105,7 @@ def run():
         c.execute('SELECT * FROM greetings WHERE username=?', [data.get_property('name')])
         res = c.fetchone()
 
-        if len(res) > 0:
+        if res is not None:
             try:
                 util.play_sound_or_alias(res[1])
             except Exception as e:
