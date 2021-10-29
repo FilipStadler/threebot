@@ -1,8 +1,15 @@
 # Plays a sound from the local collection.
 
 def execute(data, argv):
+    target = None
+
     if len(argv) == 0:
-        raise Exception('expected argument')
+        # pick a random sound
+        c = data.db.conn.cursor()
+        c.execute('SELECT * FROM sounds ORDER BY random() LIMIT 1')
+        target = c.fetchone()[0]
+    else:
+        target = argv[0]
     
-    data.audio.play(argv[0])
-    data.reply('Playing {}.'.format(argv[0]))
+    data.audio.play(target)
+    data.reply('Playing {}.'.format(target))
