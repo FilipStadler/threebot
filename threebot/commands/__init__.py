@@ -47,7 +47,7 @@ def execute_help(data, argv):
             command_dict[name].usage if hasattr(command_dict[name], 'usage') else '',
         ])
 
-    pages = data.util.into_pages(['Command', 'Description', 'Usage'], 32)
+    pages = data.util.into_pages(['Command', 'Description', 'Usage'], rows, 32)
 
     for p in pages:
         data.reply(p)
@@ -55,7 +55,6 @@ def execute_help(data, argv):
 command_dict['help'] = lambda: None
 command_dict['help'].desc = 'Gets help information on one or more commands.'
 command_dict['help'].execute = execute_help
-
 
 def execute(data, argv, depth=0):
     if depth > MAX_DEPTH:
