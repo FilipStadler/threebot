@@ -38,8 +38,8 @@ def execute_help(data, argv):
     rows = []
 
     def esc(s: str):
-        s.replace('<', '&lt;')
-        s.replace('>', '&gt;')
+        s = s.replace('<', '&lt;')
+        s = s.replace('>', '&gt;')
         return s
 
     for name in command_dict:
