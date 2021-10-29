@@ -37,6 +37,11 @@ print('Registered {} command{}.'.format(
 def execute_help(data, argv):
     rows = []
 
+    def esc(s: str):
+        s.replace('<', '&lt;')
+        s.replace('>', '&gt;')
+        return s
+
     for name in command_dict:
         if len(argv) > 0 and name not in argv:
             continue
@@ -44,7 +49,7 @@ def execute_help(data, argv):
         rows.append([
             name,
             command_dict[name].desc,
-            command_dict[name].usage if hasattr(command_dict[name], 'usage') else '',
+            esc(command_dict[name].usage) if hasattr(command_dict[name], 'usage') else '',
         ])
 
     pages = data.util.into_pages(['Command', 'Description', 'Usage'], rows, 32)
