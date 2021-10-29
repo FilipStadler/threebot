@@ -1,6 +1,7 @@
 # Bot controller.
 
 import argparse
+from . import util
 from . import commands
 from . import audio
 from . import db
@@ -81,6 +82,7 @@ def run():
         metadata.bcast = bcast
         metadata.db = db
         metadata.audio = audio
+        metadata.util = util
 
         # trim message content, remove HTML
         data.message = data.message.strip()
@@ -153,6 +155,7 @@ def run():
         metadata.reply = lambda msg: print(msg)
         metadata.bcast = lambda msg: conn.my_channel().send_text_message(msg)
         metadata.audio = audio
+        metadata.util = util
 
         if inp[0] == 'exit':
             print('Terminating..')
