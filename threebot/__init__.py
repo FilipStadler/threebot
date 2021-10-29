@@ -1,7 +1,7 @@
 # Bot controller.
 
 import argparse
-import commands
+from . import commands
 from . import audio
 from . import db
 import os
@@ -29,7 +29,7 @@ args = parser.parse_args()
 
 def play_sound_or_alias(name):
     """Tries to play a sound or an alias to a sound."""
-    c = db.db_conn.cursor()
+    c = db.conn.cursor()
 
     # check if sound is valid code
     c.execute('SELECT * FROM sounds WHERE soundname=?', [name])
@@ -80,7 +80,7 @@ def run():
         metadata.author = conn.users[data.actor].get_property('name')
         metadata.reply = reply
         metadata.bcast = bcast
-        metadata.db = db.db_conn
+        metadata.db = db
         metadata.audio = audio
 
         # trim message content, remove HTML
@@ -94,9 +94,9 @@ def run():
             print('Scraped link: {0} from {1}'.format(x[0], metadata.author))
 
             try:
-                c = db.db_conn.cursor()
+                c = db.conn.cursor()
                 c.execute('INSERT INTO links VALUES (?, ?, datetime("NOW"))', (x[0], metadata.author))
-                db.db_conn.commit()
+                db.conn.commit()
             except Exception as e:
                 print('Link insert failed: {}'.format(e))
 
@@ -145,14 +145,24 @@ def run():
 
     # Basic CLI
     while True:
-        print('> ', end=None)
-        inp = input()
+        print('> ', end='')
+        inp = input().split(' ')
 
-        if inp[0] == 'help':
-            print('Available commands: help exit')
-        elif inp[0] == 'exit':
+        metadata = lambda: None
+        metadata.author = 'Threebot'
+        metadata.db = db
+        metadata.reply = lambda msg: print(msg)
+        metadata.bcast = lambda msg: conn.my_channel().send_text_message(msg)
+        metadata.audio = audio
+
+        if inp[0] == 'exit':
             print('Terminating..')
             break
+
+        try:
+            commands.execute(metadata, inp)
+        except Exception as e:
+            print('Error: {}'.format(e))
 
     conn.my_channel().send_text_message('Bye!')
 

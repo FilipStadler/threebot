@@ -27,5 +27,4 @@ setuptools.setup(
         'pyaudio',
         'pymumble'
     ],
-    scripts=['bin/threebot']
 )

@@ -41,7 +41,7 @@ def start(mumble_conn):
     if audio_thread_running:
         raise RuntimeError('Audio thread already running!')
 
-    audio_thread_obj = threading.Thread(target=(audio_thread, mumble_conn), daemon=True)
+    audio_thread_obj = threading.Thread(target=audio_thread, args=(mumble_conn,), daemon=True)
     audio_thread_obj.start()
     print('Started audio thread.')
 
@@ -64,5 +64,4 @@ def play(code):
     if not os.path.exists(filepath):
         raise Exception('Sound {} not found.'.format(code))
 
-    command = ['mpg123', filepath]
-    sp.run(command, check=True)
+    sp.Popen(['mpg123', filepath], stdout=sp.DEVNULL, stderr=sp.DEVNULL)

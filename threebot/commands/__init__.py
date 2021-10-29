@@ -46,5 +46,11 @@ def execute(data, argv, depth=0):
     if alias is None:
         raise Exception('{} is not a recognized command or alias'.format(argv[0]))
 
+    next_argv = alias[1].split(' ') + argv[1:]
+
+    # Drop command indicators from expanded argv
+    while next_argv[0][0] == '!':
+        next_argv[0] = next_argv[0][1:]
+
     # Expand alias and recombine arguments
-    return execute(data, alias[1].split(' ') + argv[1:], depth + 1)
+    return execute(data, next_argv, depth + 1)

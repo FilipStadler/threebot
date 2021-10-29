@@ -23,6 +23,6 @@ def resolve_alias(name):
         Returns an array [commandname, action, author, timestamp] if an alias
         with name <name> exists, or None if it does not.
     """
-    c = conn.db.cursor()
+    c = conn.cursor()
     c.execute('SELECT * FROM aliases WHERE commandname=?', [name])
     return c.fetchone()
