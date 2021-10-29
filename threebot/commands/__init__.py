@@ -32,6 +32,31 @@ print('Registered {} command{}.'.format(
     's' if len(command_dict) > 1 else ''
 ))
 
+# Register built-in help command
+
+def execute_help(data, argv):
+    rows = []
+
+    for name in command_dict:
+        if len(argv) > 0 and name not in argv:
+            continue
+
+        rows.append([
+            name,
+            command_dict[name].desc,
+            command_dict[name].usage if hasattr(command_dict[name], 'usage') else '',
+        ])
+
+    pages = data.util.into_pages(['Command', 'Description', 'Usage'], 32)
+
+    for p in pages:
+        data.reply(p)
+
+command_dict['help'] = lambda: None
+command_dict['help'].desc = 'Gets help information on one or more commands.'
+command_dict['help'].execute = execute_help
+
+
 def execute(data, argv, depth=0):
     if depth > MAX_DEPTH:
         raise Exception('maximum command depth exceeded')
