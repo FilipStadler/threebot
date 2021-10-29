@@ -42,7 +42,7 @@ def execute_help(data, argv):
         s = s.replace('>', '&gt;')
         return s
 
-    for name in command_dict:
+    for name in sorted(command_dict.keys()):
         if len(argv) > 0 and name not in argv:
             continue
 
