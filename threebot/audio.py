@@ -13,6 +13,9 @@ RATE = 48000
 audio_thread_running = False
 audio_thread_obj = None
 
+history = []
+HISTORY_LEN = 6
+
 def audio_thread(mumble_conn):
     global audio_thread_running
     audio_thread_running = True
@@ -60,6 +63,11 @@ def stop():
 
 def play(code):
     filepath = 'sounds/%s.mp3' % code
+
+    history.insert(0, code)
+    
+    while len(history) > HISTORY_LEN:
+        history.pop()
 
     if not os.path.exists(filepath):
         raise Exception('Sound {} not found.'.format(code))
