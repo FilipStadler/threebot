@@ -5,7 +5,7 @@ import random
 import subprocess as sp
 
 desc = 'Grabs a sound clip from YouTube or other internet media source.'
-usage = 'get <URL> <timestamp> <duration>'
+usage = 'get <URL> <[HR:][MN:]SEC> <DURATION>'
 
 def execute(data, argv):
     if len(argv) < 3:

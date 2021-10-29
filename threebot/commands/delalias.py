@@ -1,7 +1,7 @@
 # Alias delete command.
 
 desc = 'Deletes an alias.'
-usage = 'delalias <aliasname>'
+usage = 'delalias <ALIASNAME>'
 
 def execute(data, argv):
     # delete an alias

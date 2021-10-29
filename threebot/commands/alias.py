@@ -1,7 +1,7 @@
 # Alias command.
 
 desc = 'Defines a new alias.'
-usage = 'alias <aliasname> <command>'
+usage = 'alias <ALIASNAME> <COMMAND>'
 
 def execute(data, argv):
     if len(argv) < 2:

@@ -1,7 +1,7 @@
 # Greeting command.
 
 desc = 'Sets or unsets your greeting sound.'
-usage = 'greeting [code|alias]'
+usage = 'greeting [CODE|ALIAS]'
 
 def execute(data, argv):
     c = data.db.conn.cursor()
@@ -14,7 +14,7 @@ def execute(data, argv):
             c.execute('INSERT INTO greetings VALUES (?, ?)', [data.author, argv[0]])
         else:
             c.execute('UPDATE greetings SET greeting=? WHERE username=?', [argv[0], data.author])
-            
+
         data.db.conn.commit()
         data.reply('Set greeting to {0}.'.format(argv[0]))
     else:
