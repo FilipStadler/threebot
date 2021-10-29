@@ -50,7 +50,6 @@ def play_sound_or_alias(name):
 
             if action[0] != '!s':
                 raise Exception('"{0}" aliases to "{1}" which does not play a sound'.format(name, r2[0][1]))
-                raise
             else:
                 audio.play(action[1])
 
@@ -124,7 +123,7 @@ def run():
             reply('Error: {}'.format(e))
 
     def join_callback(data):
-        c = db.cursor()
+        c = db.conn.cursor()
 
         # check if user has greeting
         c.execute('SELECT * FROM greetings WHERE username=?', [data.get_property('name')])
