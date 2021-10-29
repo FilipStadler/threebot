@@ -6,7 +6,7 @@ usage = 'sounds [PAGENUM]'
 def execute(data, argv):
     # query all sounds
     c = data.db.conn.cursor()
-    c.execute('SELECT * FROM sounds ORDER BY soundname')
+    c.execute('SELECT * FROM sounds ORDER BY created')
     rows = c.fetchall()
 
     pages = data.util.into_pages(['Sound', 'Author', 'Created'], rows)
