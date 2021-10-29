@@ -4,8 +4,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="threebot",
-    version="0.2",
+    name="threebot-codeandkey",
+    version="0.2.1",
     author="Justin Stanley",
     author_email="jtst@iastate.edu",
     description="A modular mumble bot",
@@ -27,4 +27,5 @@ setuptools.setup(
         'pyaudio',
         'pymumble'
     ],
+    scripts=['threebot.py'],
 )
