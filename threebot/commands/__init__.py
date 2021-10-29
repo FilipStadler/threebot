@@ -38,7 +38,10 @@ def execute(data, argv, depth=0):
 
     # Try and resolve a built-in command
     if argv[0] in command_dict:
-        return command_dict[argv[0]].execute(data, argv[1:])
+        try:
+            ret = command_dict[argv[0]].execute(data, argv[1:])
+        except Exception as e:
+            raise Exception('{}: {}'.format(argv[0], e))
     
     # Try and resolve an alias
     alias = data.db.resolve_alias(argv[0])
