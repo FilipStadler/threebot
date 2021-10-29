@@ -1,4 +1,7 @@
-# Plays a sound from the local collection.
+# Sound play command.
+
+desc = "Plays a sound from the local collection."
+usage = "s [CODE]"
 
 def execute(data, argv):
     target = None
