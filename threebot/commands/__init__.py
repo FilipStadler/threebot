@@ -39,7 +39,7 @@ def execute(data, argv, depth=0):
     # Try and resolve a built-in command
     if argv[0] in command_dict:
         try:
-            ret = command_dict[argv[0]].execute(data, argv[1:])
+            return command_dict[argv[0]].execute(data, argv[1:])
         except Exception as e:
             raise Exception('{}: {}'.format(argv[0], e))
     
