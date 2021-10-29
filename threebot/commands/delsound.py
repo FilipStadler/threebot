@@ -9,7 +9,7 @@ def execute(data, argv):
     # delete a sound
 
     if len(argv) < 1:
-        raise Exception('delsound: expected argument')
+        raise Exception('expected argument')
 
     if os.path.exists('sounds/{0}.mp3'.format(argv[0])):
         c = data.db.conn.cursor()
