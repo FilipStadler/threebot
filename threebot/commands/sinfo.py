@@ -1,4 +1,4 @@
-# Sound play command.
+# Sound information query.
 
 desc = "Queries information about a sound."
 usage = "sinfo [CODE/ALIAS]"

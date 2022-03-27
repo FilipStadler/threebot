@@ -7,6 +7,8 @@ import subprocess as sp
 desc = 'Grabs a sound clip from YouTube or other internet media source.'
 usage = 'get <URL> <[[HR:]MN:]SEC> <DURATION>'
 
+grab_history = {}
+
 def execute(data, argv):
     if len(argv) < 3:
         raise Exception('get: expected 3 arguments, found {0}'.format(len(argv)))
@@ -48,3 +50,6 @@ def execute(data, argv):
 
     data.reply('Created new clip {0}.'.format(name))
     data.audio.play(name)
+
+    # write grab history
+    grab_history[author] = name

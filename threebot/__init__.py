@@ -58,6 +58,7 @@ def run():
         metadata.db = db
         metadata.audio = audio
         metadata.util = util
+        metadata.commands = commands
 
         # trim message content, remove HTML
         data.message = data.message.strip()
