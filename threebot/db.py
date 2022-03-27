@@ -26,3 +26,17 @@ def resolve_alias(name):
     c = conn.cursor()
     c.execute('SELECT * FROM aliases WHERE commandname=?', [name])
     return c.fetchone()
+
+def random_sound():
+    """Returns a random sound code. Raises an exception if no sounds are
+       available."""
+
+    c = conn.cursor()
+    c.execute('SELECT * FROM sounds ORDER BY random() LIMIT 1')
+
+    res = c.fetchall()
+
+    if len(res) < 1:
+        raise RuntimeError('No sounds available')
+
+    return res[0][0]
