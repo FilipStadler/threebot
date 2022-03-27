@@ -19,4 +19,5 @@ def execute(data, argv):
         data.reply('Set greeting to {0}.'.format(argv[0]))
     else:
         c.execute('DELETE FROM greetings WHERE username=?', [data.author])
+        data.db.conn.commit()
         data.reply('Removed greeting.')
