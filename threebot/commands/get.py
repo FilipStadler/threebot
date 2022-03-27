@@ -29,6 +29,7 @@ def execute(data, argv):
         name = namegen()
 
     # clip a youtube video
+    data.reply('Fetching..')
     command = ['youtube-dl', '-x',
                 '--audio-format', 'mp3',
                 '-o', 'sounds/{0}.tmp.mp3'.format(name), argv[0]]
@@ -52,4 +53,4 @@ def execute(data, argv):
     data.audio.play(name)
 
     # write grab history
-    grab_history[author] = name
+    grab_history[data.author] = name

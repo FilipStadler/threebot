@@ -27,28 +27,34 @@ def into_pages(headers, rows, rows_per_page=32):
 
     return pages
 
-def play_sound_or_alias(name):
-    """Tries to play a sound or an alias to a sound."""
+def resolve_sound_or_alias(name):
+    """Resolves a SOUND input to a sound name. Returns a pair (code, is_alias)"""
     c = db.conn.cursor()
+
+    # try and resolve as an alias
+    c.execute('SELECT * FROM aliases WHERE commandname=?', [name])
+
+    res = c.fetchall()
+
+    if len(res) > 0:
+        # check that the alias plays a sound
+        action = res[0][1].split(' ')
+
+        if action[0] != '!s' and action[0] != 's':
+            raise Exception('"{0}" aliases to "{1}" which does not play a sound'.format(name, res[0][1]))
+
+        return action[1], True
 
     # check if sound is valid code
     c.execute('SELECT * FROM sounds WHERE soundname=?', [name])
 
-    if len(c.fetchall()) > 0:
-        audio.play(name)
-    else:
-        # try and resolve as an alias
-        c.execute('SELECT * FROM aliases WHERE commandname=?', [name])
+    res = c.fetchall()
 
-        r2 = c.fetchall()
+    if len(res) < 1:
+        raise Exception('"{0}" is not a recognized alias or sound'.format(name))
 
-        if len(r2) == 0:
-            raise Exception('"{0}" is not a recognized sound or alias'.format(name))
-        else:
-            # check that the alias plays a sound
-            action = r2[0][1].split(' ')
+    return name, False
 
-            if action[0] != '!s':
-                raise Exception('"{0}" aliases to "{1}" which does not play a sound'.format(name, r2[0][1]))
-            else:
-                audio.play(action[1])
+def play_sound_or_alias(name):
+    """Plays a sound either by code or alias."""
+    audio.play(resolve_sound_or_alias(name))
