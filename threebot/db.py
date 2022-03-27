@@ -14,7 +14,7 @@ print('{} sound entries in database.'.format(c.fetchone()[0]))
 c = conn.cursor()
 c.execute('CREATE TABLE IF NOT EXISTS links ( dest TEXT UNIQUE, author TEXT, timestamp DATETIME )')
 c.execute('CREATE TABLE IF NOT EXISTS aliases ( commandname TEXT UNIQUE, action TEXT, author TEXT, timestamp DATETIME )')
-c.execute('CREATE TABLE IF NOT EXISTS sounds ( soundname TEXT UNIQUE, author TEXT, timestamp DATETIME )')
+c.execute('CREATE TABLE IF NOT EXISTS sounds ( soundname TEXT UNIQUE, author TEXT, timestamp DATETIME, source TEXT, start FLOAT, len FLOAT )')
 c.execute('CREATE TABLE IF NOT EXISTS greetings ( username TEXT UNIQUE, greeting TEXT )')
 c.execute('CREATE TABLE IF NOT EXISTS groups ( groupname TEXT UNIQUE, content TEXT, author TEXT, timestamp DATETIME )')
 

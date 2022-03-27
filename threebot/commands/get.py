@@ -43,7 +43,7 @@ def execute(data, argv):
 
     # clip OK, add to database
     c = data.db.conn.cursor()
-    c.execute('INSERT INTO sounds VALUES (?, ?, datetime("NOW"))', (name, data.author))
+    c.execute('INSERT INTO sounds VALUES (?, ?, datetime("NOW"), ?, ?, ?)', (name, data.author, argv[0], argv[1], argv[2]))
     data.db.conn.commit()
 
     data.reply('Created new clip {0}.'.format(name))

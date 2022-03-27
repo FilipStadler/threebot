@@ -8,6 +8,7 @@ from . import db
 import os
 import pymumble_py3 as pymumble
 import re
+import sys
 from datetime import datetime
 
 # Cursed URL regex
@@ -96,7 +97,8 @@ def run():
         try:
             commands.execute(metadata, parts)
         except Exception as e:
-            reply('Error: {}'.format(e))
+            reply('error: {}'.format(e))
+            print('exception in command: {}'.format(sys.exc_info[2]))
 
     def join_callback(data):
         c = db.conn.cursor()
