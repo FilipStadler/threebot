@@ -110,6 +110,14 @@ def run():
                 util.play_sound_or_alias(res[1])
             except Exception as e:
                 data.send_text_message('Error in greeting: {0}'.format(str(e)))
+        else:
+            # No greeting, play random sound
+            try:
+                target = db.random_sound()
+                util.play_sound_or_alias(target)
+                data.send_text_message('Random greeting: {0} (!greeting to update)'.format(target))
+            except Exception as e:
+                data.send_text_message('Unexpected greeting failure: {0}'.format(str(e)))
 
     # Bind connection callbacks
     conn.callbacks.add_callback(pymumble.constants.PYMUMBLE_CLBK_TEXTMESSAGERECEIVED, message_callback)
