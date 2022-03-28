@@ -29,7 +29,7 @@ def execute(data, argv):
         raise Exception('{}: no source info (too old), can\'t modify')
 
     # modify grab parameters
-    mode = 4 if argv[1][0] == 'l' else 5
+    mode = 5 if argv[1][0] == 'l' else 4
 
     if argv[2][0] == '+':
         res[mode] += float(argv[2][1:])
