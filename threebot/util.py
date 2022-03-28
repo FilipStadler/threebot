@@ -27,7 +27,7 @@ def into_pages(headers, rows, rows_per_page=32):
 
     return pages
 
-def resolve_sound_or_alias(name):
+def resolve_sound_or_alias(name, check_alias=False):
     """Resolves a SOUND input to a sound name. Returns a pair (code, is_alias)"""
     c = db.conn.cursor()
 
@@ -43,7 +43,10 @@ def resolve_sound_or_alias(name):
         if action[0] != '!s' and action[0] != 's':
             raise Exception('"{0}" aliases to "{1}" which does not play a sound'.format(name, res[0][1]))
 
-        return action[1], True
+        if check_alias:
+            return action[1], True
+        else:
+            return action[1]
 
     # check if sound is valid code
     c.execute('SELECT * FROM sounds WHERE soundname=?', [name])
@@ -53,7 +56,10 @@ def resolve_sound_or_alias(name):
     if len(res) < 1:
         raise Exception('"{0}" is not a recognized alias or sound'.format(name))
 
-    return name, False
+    if check_alias:
+        return name, False 
+    else:
+        return name
 
 def play_sound_or_alias(name):
     """Plays a sound either by code or alias."""

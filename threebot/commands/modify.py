@@ -12,7 +12,7 @@ def execute(data, argv):
     if argv[1][0] != 'l' and argv[1][0] != 's':
         raise Exception('invalid mode, must be one of "length", "start"')
 
-    target, is_alias = data.util.resolve_sound_or_alias(argv[0])
+    target, is_alias = data.util.resolve_sound_or_alias(argv[0], True)
 
     # query sound information
     c = data.db.conn.cursor()
