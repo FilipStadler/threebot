@@ -134,7 +134,7 @@ def run():
         print('> ', end='')
 
         inp_raw = input()
-        inp = inp_raw.trim().split(' ')
+        inp = inp_raw.strip().split(' ')
 
         if len(inp) < 1:
             continue
