@@ -4,9 +4,6 @@ desc = 'Plays your bind sound.'
 usage = 'bind'
 
 def execute(data, argv):
-    if len(argv) < 1:
-        raise Exception('expected argument')
-
     # search for user bind
     c = data.db.conn.cursor()
     c.execute('SELECT name FROM binds WHERE username=?', [data.author])
