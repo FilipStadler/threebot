@@ -140,7 +140,7 @@ def run():
         inp_raw = input()
         inp = inp_raw.strip().split(' ')
 
-        if len(inp) < 1:
+        if len(inp) < 1 or len(inp[0]) < 1:
             continue
 
         metadata = lambda: None
