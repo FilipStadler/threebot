@@ -151,7 +151,7 @@ def run():
             print('Terminating..')
             break
 
-        if (inp[0] == '!')
+        if inp[0] == '!':
             inp[0] = inp[0][1:]
 
             try:
