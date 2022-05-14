@@ -17,7 +17,7 @@ def execute(data, argv):
     if results is None:
         c.execute('INSERT INTO binds VALUES (?, ?)', [data.author, argv[0]])
     else:
-        c.execute('UPDATE binds SET name=? WHERE username=?', [argv[0], data.author])
+        c.execute('UPDATE binds SET bind=? WHERE username=?', [argv[0], data.author])
 
     data.db.conn.commit()
     data.reply('Set bind to {0}.'.format(argv[0]))

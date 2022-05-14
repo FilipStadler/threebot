@@ -6,7 +6,7 @@ usage = 'bind'
 def execute(data, argv):
     # search for user bind
     c = data.db.conn.cursor()
-    c.execute('SELECT name FROM binds WHERE username=?', [data.author])
+    c.execute('SELECT bind FROM binds WHERE username=?', [data.author])
 
     results = c.fetchone()
 
@@ -14,3 +14,4 @@ def execute(data, argv):
         raise Exception('Your bind is not set! Assign it with \'!bind\'.')
 
     data.util.play_sound_or_alias(results[0])
+    data.reply('Playing bind: {}'.format(results[0]))
