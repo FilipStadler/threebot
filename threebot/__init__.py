@@ -136,6 +136,9 @@ def run():
         inp_raw = input()
         inp = inp_raw.trim().split(' ')
 
+        if len(inp) < 1:
+            continue
+
         metadata = lambda: None
         metadata.author = 'Threebot'
         metadata.db = db
