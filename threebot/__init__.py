@@ -132,7 +132,9 @@ def run():
     # Basic CLI
     while True:
         print('> ', end='')
-        inp = input().split(' ')
+
+        inp_raw = input()
+        inp = inp_raw.trim().split(' ')
 
         metadata = lambda: None
         metadata.author = 'Threebot'
@@ -142,14 +144,19 @@ def run():
         metadata.audio = audio
         metadata.util = util
 
-        if inp[0] == 'exit':
+        if inp[0] == '!exit':
             print('Terminating..')
             break
 
-        try:
-            commands.execute(metadata, inp)
-        except Exception as e:
-            print('Error: {}'.format(e))
+        if (inp[0] == '!')
+            inp[0] = inp[0][1:]
+
+            try:
+                commands.execute(metadata, inp)
+            except Exception as e:
+                print('Error: {}'.format(e))
+
+        conn.my_channel().send_text_message(inp_raw)
 
     conn.my_channel().send_text_message('Bye!')
 
