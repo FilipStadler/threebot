@@ -60,6 +60,10 @@ def run():
         metadata.util = util
         metadata.commands = commands
 
+        # avoid danger
+        if metadata.author == NAME:
+            return
+
         # trim message content, remove HTML
         data.message = data.message.strip()
         data.message = re.sub(r"<[^<>]*>", '', data.message)
@@ -151,9 +155,7 @@ def run():
             print('Terminating..')
             break
 
-        if inp[0] == '!':
-            inp[0] = inp[0][1:]
-
+        if inp[0][0] == '!':
             try:
                 commands.execute(metadata, inp)
             except Exception as e:

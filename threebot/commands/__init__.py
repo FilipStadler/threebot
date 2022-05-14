@@ -65,6 +65,10 @@ def execute(data, argv, depth=0):
     if depth > MAX_DEPTH:
         raise Exception('maximum command depth exceeded')
 
+    # drop command indicator if needed
+    while argv[0][0] == '!':
+        argv[0] = argv[0][1:]
+
     # Try and resolve a built-in command
     if argv[0] in command_dict:
         try:
