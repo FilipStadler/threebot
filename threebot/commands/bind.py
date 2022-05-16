@@ -9,15 +9,16 @@ def execute(data, argv):
     c.execute('SELECT bind FROM binds WHERE username=?', [data.author])
 
     results = c.fetchone()
-    
+ 
+    if results[0]:
+        data.util.play_sound_or_alias(results[0])
+        data.reply('Playing bind: {}'.format(results[0]))
+        return   
+
     if results[2]:
         data.reply('too many arguments. Usage: bind [CODE|ALIAS]')
         return
 
-    if results[0]:
-        data.util.play_sound_or_alias(results[0])
-        data.reply('Playing bind: {}'.format(results[0]))
-        return
 
     # check if binding or rebinding
     c.execute('SELECT * FROM binds WHERE username=?', [data.author])
