@@ -14,6 +14,11 @@ def execute(data, argv):
         data.reply('too many arguments. Usage: bind [CODE|ALIAS]')
         return
 
+    if results[0]:
+        data.util.play_sound_or_alias(results[0])
+        data.reply('Playing bind: {}'.format(results[0]))
+        return
+
     # check if binding or rebinding
     c.execute('SELECT * FROM binds WHERE username=?', [data.author])
     if results is None:
@@ -24,6 +29,4 @@ def execute(data, argv):
     data.db.conn.commit()
     data.reply('Set bind to {0}.'.format(argv[0]))
 
-    data.util.play_sound_or_alias(results[0])
-    data.reply('Playing bind: {}'.format(results[0]))
 
