@@ -9,7 +9,9 @@ def execute(data, argv):
     c.execute('SELECT bind FROM binds WHERE username=?', [data.author])
 
     results = c.fetchone()
- 
+    if results is None:
+        raise Exception('No bind set! Usage: bind [CODE|ALIAS]')
+
     if len(argv) < 1:
         data.util.play_sound_or_alias(results[0])
         data.reply('Playing bind: {}'.format(results[0]))
