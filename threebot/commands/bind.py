@@ -10,7 +10,7 @@ def execute(data, argv):
 
     results = c.fetchone()
  
-    if len(argv) = 0:
+    if len(argv) < 1:
         data.util.play_sound_or_alias(results[0])
         data.reply('Playing bind: {}'.format(results[0]))
         return
