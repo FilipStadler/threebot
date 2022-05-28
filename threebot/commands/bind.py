@@ -20,6 +20,9 @@ def execute(data, argv):
     if len(argv) > 1:
         raise Exception('too many arguments. Usage: bind [CODE|ALIAS]')
 
+    # verify the bind is a valid sound
+    data.util.resolve_sound_or_alias(argv[0])
+
     # check if binding or rebinding
     c.execute('SELECT * FROM binds WHERE username=?', [data.author])
     results = c.fetchone()
