@@ -7,7 +7,7 @@ import subprocess as sp
 
 CHUNK=1024
 FORMAT=pyaudio.paInt16
-CHANNELS = 1
+CHANNELS = 2
 RATE = 48000
 
 audio_thread_running = False

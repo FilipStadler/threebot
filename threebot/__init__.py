@@ -33,7 +33,7 @@ def run():
     # Connect to server.
     print('Connecting to {0}:{1} as {2}'.format(args.host, args.port, args.name))
 
-    conn = pymumble.Mumble(args.host, args.name, port=args.port, password=args.pw)
+    conn = pymumble.Mumble(args.host, args.name, port=args.port, password=args.pw, stereo=True)
     conn.set_application_string(args.name)
     conn.start()
     conn.is_ready()
