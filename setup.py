@@ -25,7 +25,8 @@ setuptools.setup(
     python_requires=">=3.6",
     install_requires=[
         'pyaudio',
-        'pymumble'
+        'pymumble',
+        'pysqlite3'
     ],
     scripts=['threebot.py'],
 )
