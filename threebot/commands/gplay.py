@@ -20,6 +20,7 @@ def execute(data, argv):
     if len(res) == 0:
         raise Exception('"{}": group not found'.format(argv[0]))
 
+    mods = [] if len(argv) < 2 else argv[1:]
+
     to_play = random.choice(res[0][0].split(':'))
-    data.util.play_sound_or_alias(to_play)
-    data.reply('Playing {}.'.format(to_play))
+    data.commands.execute(data, ['s', to_play] + mods)
