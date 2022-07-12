@@ -61,7 +61,7 @@ def stop():
 
     print('Joined audio thread.')
 
-def play(code, mode='normal'):
+def play(code, mods=[]):
     filepath = 'sounds/%s.mp3' % code
 
     history.insert(0, code)
@@ -72,19 +72,16 @@ def play(code, mode='normal'):
     if not os.path.exists(filepath):
         raise Exception('Sound {} not found.'.format(code))
 
+    modargs = {
+        'fast': ['-d', '2'],
+        'slow': ['-h', '2'],
+        'muffle': ['-r', '1500']
+    }
+
     args = ['mpg123']
 
-    if mode == 'normal':
-        pass
-    elif mode == 'fast':
-        args.extend(['-d', '2'])
-    elif mode == 'slow':
-        args.extend(['-h', '2'])
-    elif mode == 'muffle':
-        args.extend(['-r', '1500'])
-    else:
-        raise Exception('unknown playback mode "{}"'.format(mode))
+    for m in mods:
+        args.extend(modargs.get(m, []))
 
     args.append(filepath)
-
     sp.Popen(args, stdout=sp.DEVNULL, stderr=sp.DEVNULL)
