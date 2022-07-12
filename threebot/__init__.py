@@ -103,7 +103,7 @@ def run():
             commands.execute(metadata, parts)
         except Exception as e:
             reply('error: {}'.format(e))
-            print('{} {} ! exception in command: {}'.format(datetime.now(), metadata.author, sys.exc_info()[2]))
+            print('{} {} ! exception in command: {}'.format(datetime.now(), metadata.author, sys.exc_info()[1]))
 
     def join_callback(data):
         c = db.conn.cursor()
