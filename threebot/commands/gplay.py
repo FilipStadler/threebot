@@ -23,4 +23,8 @@ def execute(data, argv):
     mods = [] if len(argv) < 2 else argv[1:]
 
     to_play = random.choice(res[0][0].split(':'))
+
+    # Test if sound is an alias or not to determine playing method
+    to_play, is_alias = data.util.resolve_sound_or_alias(to_play, True)
+
     data.commands.execute(data, ['s', to_play] + mods)
