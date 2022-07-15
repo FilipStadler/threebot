@@ -10,7 +10,7 @@ def execute(data, argv):
     target = None
 
     if len(argv) > 1:
-        target = util.resolve_sound_or_alias(argv[1])
+        target = data.util.resolve_sound_or_alias(argv[1])
     else:
         hist = data.commands.command_dict['get'].grab_history
 
