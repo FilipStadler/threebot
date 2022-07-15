@@ -72,21 +72,25 @@ def play(code, mods=[]):
     if not os.path.exists(filepath):
         raise Exception('Sound {} not found.'.format(code))
 
+    if len(mods) < 1:
+        return sp.Popen(['mpg123', filepath], stdout=sp.DEVNULL, stderr=sp.DEVNULL)
+
     modfilters = {
         'fast': ['scaletempo=scale=2'],
-        'slow': ['scaletempo=scale=0.75'],
-        'muffle': ['lavfi=graph=[lowpass=frequency=75,volume=11]'],
+        'slow': ['scaletempo=scale=0.65'],
+        'muffle': ['lavfi=graph=[lowpass=frequency=75,dynaudnorm=f=10:g=21:m=50]'],
     }
 
     args = ['mpv']
 
-    filters = []
+    filters = ['lavfi=graph=[loudnorm]']
 
     for m in mods:
         filters.extend(modfilters.get(m, []))
 
     if len(filters) > 0:
         args.append(f'--af={",".join(filters)}')
+
 
     args.append(filepath)
     sp.Popen(args, stdout=sp.DEVNULL, stderr=sp.DEVNULL)
