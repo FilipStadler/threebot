@@ -9,7 +9,7 @@ def execute(data, argv):
     c.execute('SELECT * FROM sounds ORDER BY timestamp DESC')
     rows = c.fetchall()
 
-    pages = data.util.into_pages(['Sound', 'Author', 'Created'], rows)
+    pages = data.util.into_pages(['Sound', 'Author', 'Created', 'Source', 'Start', 'Length'], rows)
     selected = int(argv[0]) - 1 if len(argv) > 0 else 0
 
     if selected < 0 or selected >= len(pages):
