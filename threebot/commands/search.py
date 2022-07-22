@@ -12,9 +12,6 @@ def execute(data, argv):
     c.execute('SELECT * FROM aliases ORDER BY commandname')
     rows = c.fetchall()
 
-    # Strip command indicators before applying filter
-    rows = list(map(lambda obj: [obj[0].removeprefix('!'), obj[1], obj[2], obj[3]], rows))
-
     # Filter out rows not matching the query
     rows = list(filter(lambda t: t[0].startswith(argv[0]), rows))
 
