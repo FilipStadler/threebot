@@ -9,7 +9,7 @@ def set_bind(author, name):
     results = c.fetchone()
     
     # verify the bind is a valid sound
-    data.util.resolve_sound_or_alias(argv[0])
+    data.util.resolve_sound_or_alias(name)
 
     # check if binding or rebinding
     c.execute('SELECT * FROM binds WHERE username=?', [author])
