@@ -3,6 +3,26 @@
 from . import audio
 from . import db
 
+def set_bind(author, name):
+    c = data.db.conn.cursor()
+    c.execute("SELECT bind FROM binds WHERE username=?", [author])
+    results = c.fetchone()
+    
+    # verify the bind is a valid sound
+    data.util.resolve_sound_or_alias(argv[0])
+
+    # check if binding or rebinding
+    c.execute('SELECT * FROM binds WHERE username=?', [author])
+    results = c.fetchone()
+    if results is None:
+        c.execute('INSERT INTO binds VALUES (?, ?)', [author, name])
+    else:
+        c.execute('UPDATE binds SET bind=? WHERE username=?', [name, author])
+
+    data.db.conn.commit()
+    data.reply('Set bind to {0}.'.format(name))
+
+
 def into_pages(headers, rows, rows_per_page=32):
     pages = []
 
