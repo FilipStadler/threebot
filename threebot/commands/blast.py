@@ -14,4 +14,4 @@ def execute(data, argv):
         raise Exception('no sound grabbed recently')
 
     target = hist[data.author]
-    util.set_bind(data.author, target)
+    data.util.set_bind(data.author, target)
