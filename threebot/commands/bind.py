@@ -10,7 +10,7 @@ def execute(data, argv):
         c.execute('SELECT bind FROM binds WHERE username=?', [data.author])
 
         results = c.fetchone()
-        
+
         if results is None:
             raise Exception('No bind set! Usage: bind [CODE|ALIAS]')
 
@@ -20,5 +20,5 @@ def execute(data, argv):
 
     if len(argv) > 1:
         raise Exception('too many arguments. Usage: bind [CODE|ALIAS]')
-    
-    data.util.set_bind(data.author, argv[1])
+
+    data.util.set_bind(data, argv[1])

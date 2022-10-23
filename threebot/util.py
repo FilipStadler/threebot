@@ -3,30 +3,29 @@
 from . import audio
 from . import db
 
-def set_bind(author, name):
+def set_bind(data, name):
     c = data.db.conn.cursor()
-    
+
     # verify the bind is a valid sound
     resolve_sound_or_alias(name)
 
     # check if binding or rebinding
-    c.execute('SELECT * FROM binds WHERE username=?', [author])
+    c.execute('SELECT * FROM binds WHERE username=?', [data.author])
     results = c.fetchone()
     if results is None:
-        c.execute('INSERT INTO binds VALUES (?, ?)', [author, name])
+        c.execute('INSERT INTO binds VALUES (?, ?)', [data.author, name])
     else:
-        c.execute('UPDATE binds SET bind=? WHERE username=?', [name, author])
+        c.execute('UPDATE binds SET bind=? WHERE username=?', [name, data.author])
 
     data.db.conn.commit()
     data.reply('Set bind to {0}.'.format(name))
-
 
 def into_pages(headers, rows, rows_per_page=32):
     pages = []
 
     while len(rows) > 0:
         msg = '<table><tr>'
-        
+
         for h in headers:
             msg += '<th>{0}</th>'.format(h)
 
@@ -75,7 +74,7 @@ def resolve_sound_or_alias(name, check_alias=False):
         raise Exception('"{0}" is not a recognized alias or sound'.format(name))
 
     if check_alias:
-        return name, False 
+        return name, False
     else:
         return name
 

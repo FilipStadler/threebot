@@ -8,10 +8,10 @@ def execute(data, argv):
         raise Exception('incorrect usage. Usage: !blast #sets last played sound to bind')
 
     target = None
-    hist = data.commands.command_dict['get'].grab_history
+    hist = data.audio.history
 
-    if data.author not in hist:
+    if not hist:
         raise Exception('no sound grabbed recently')
 
-    target = hist[data.author]
-    data.util.set_bind(data.author, target)
+    target = hist[0]
+    data.util.set_bind(data, target)
