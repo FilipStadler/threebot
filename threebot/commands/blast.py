@@ -14,6 +14,6 @@ def execute(data, argv):
         raise Exception('no sound played recently')
 
     target = hist[0]
-    data.util.set_bind(data, target)
+    data.util.set_bind(data.author, target)
 
-    data.reply('Set bind to {0}'.format(name))
+    data.reply('Set bind to {0}'.format(target))
