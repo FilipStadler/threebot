@@ -1,6 +1,6 @@
 # Bind shorthand.
 
-desc = "Sets the caller's bind entry in the DB to the last sound grabbed by the caller."
+desc = "Sets the caller's bind entry in the DB to the last sound played by the caller."
 usage = "blast"
 
 def execute(data, argv):
