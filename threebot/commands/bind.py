@@ -21,4 +21,4 @@ def execute(data, argv):
     if len(argv) > 1:
         raise Exception('too many arguments. Usage: bind [CODE|ALIAS]')
 
-    data.util.set_bind(data, argv[1])
+    data.util.set_bind(data.author, argv[0])

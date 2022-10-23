@@ -3,22 +3,21 @@
 from . import audio
 from . import db
 
-def set_bind(data, name):
-    c = data.db.conn.cursor()
+def set_bind(author, name):
+    c = db.conn.cursor()
 
     # verify the bind is a valid sound
     resolve_sound_or_alias(name)
 
     # check if binding or rebinding
-    c.execute('SELECT * FROM binds WHERE username=?', [data.author])
+    c.execute('SELECT * FROM binds WHERE username=?', [author])
     results = c.fetchone()
     if results is None:
-        c.execute('INSERT INTO binds VALUES (?, ?)', [data.author, name])
+        c.execute('INSERT INTO binds VALUES (?, ?)', [author, name])
     else:
-        c.execute('UPDATE binds SET bind=? WHERE username=?', [name, data.author])
+        c.execute('UPDATE binds SET bind=? WHERE username=?', [name, author])
 
-    data.db.conn.commit()
-    data.reply('Set bind to {0}.'.format(name))
+    db.conn.commit()
 
 def into_pages(headers, rows, rows_per_page=32):
     pages = []

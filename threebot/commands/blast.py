@@ -11,7 +11,9 @@ def execute(data, argv):
     hist = data.audio.history
 
     if not hist:
-        raise Exception('no sound grabbed recently')
+        raise Exception('no sound played recently')
 
     target = hist[0]
     data.util.set_bind(data, target)
+
+    data.reply('Set bind to {0}'.format(name))
