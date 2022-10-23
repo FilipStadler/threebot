@@ -22,3 +22,4 @@ def execute(data, argv):
         raise Exception('too many arguments. Usage: bind [CODE|ALIAS]')
 
     data.util.set_bind(data.author, argv[0])
+    data.reply('Set bind to {0}'.format(argv[0]))
