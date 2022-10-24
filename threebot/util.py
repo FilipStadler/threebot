@@ -22,6 +22,7 @@ def set_bind(author, name):
     db.conn.commit()
 
 def into_pages(headers, rows, rows_per_page=32):
+    """Converts data into HTML pages."""
     pages = []
 
     while len(rows) > 0:
@@ -46,7 +47,7 @@ def into_pages(headers, rows, rows_per_page=32):
     return pages
 
 def resolve_sound_or_alias(name, check_alias=False):
-    """Resolves a SOUND input to a sound name. Returns a pair (code, is_alias)"""
+    """Resolves a sound input to a sound name. Returns a pair (code, is_alias)"""
     c = db.conn.cursor()
 
     # try and resolve as an alias
