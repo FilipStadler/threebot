@@ -11,7 +11,7 @@ grab_history = {}
 
 def execute(data, argv):
     if len(argv) < 3:
-        raise Exception('get: expected 3 arguments, found {0}'.format(len(argv)))
+        raise Exception(f'get: expected 3 arguments, found {len(argv)}')
 
     # define name generator
     def namegen():
@@ -46,7 +46,11 @@ def execute(data, argv):
 
     # clip OK, add to database
     c = data.db.conn.cursor()
-    c.execute('INSERT INTO sounds VALUES (?, ?, datetime("NOW"), ?, ?, ?)', (name, data.author, argv[0], argv[1], argv[2]))
+
+    param = (name, data.author, argv[0], argv[1], argv[2])
+    c.execute('INSERT INTO sounds VALUES (?, ?, datetime("NOW"), ?, ?, ?)',
+              param)
+
     data.db.conn.commit()
 
     data.reply('Created new clip {0}.'.format(name))
