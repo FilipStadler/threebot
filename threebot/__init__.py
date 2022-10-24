@@ -8,6 +8,8 @@ from . import db
 import argparse
 import os
 import pymumble_py3 as pymumble
+from pymumble.constants import PYMUMBLE_CLBK_USERCREATED
+from pymmuble.constants import PYMUMBLE_CLBK_TEXTMESSAGERECEIVED
 import re
 import sys
 from datetime import datetime
@@ -34,9 +36,14 @@ def run():
     """Starts the bot. Connects to the server and spawns threads."""
 
     # Connect to server.
-    print('Connecting to {0}:{1} as {2}'.format(args.host, args.port, args.name))
+    print(f'Connecting to {args.host}:{args.port} as {args.name}')
 
-    conn = pymumble.Mumble(args.host, args.name, port=args.port, password=args.pw, stereo=True)
+    conn = pymumble.Mumble(args.host,
+                           args.name,
+                           port=args.port,
+                           password=args.pw,
+                           stereo=True)
+
     conn.set_application_string(args.name)
     conn.start()
     conn.is_ready()
@@ -77,14 +84,15 @@ def run():
         urls = re.findall(URL_REGEX, data.message)
 
         for x in urls:
-            print('Scraped link: {0} from {1}'.format(x[0], metadata.author))
+            print(f'Scraped link: {x[0]} from {metadata.author}')
 
             try:
                 c = db.conn.cursor()
-                c.execute('INSERT INTO links VALUES (?, ?, datetime("NOW"))', (x[0], metadata.author))
+                c.execute('INSERT INTO links VALUES (?, ?, datetime("NOW"))',
+                          (x[0], metadata.author))
                 db.conn.commit()
             except Exception as e:
-                print('Link insert failed: {}'.format(e))
+                print(f'Link insert failed: {e}')
 
         # ignore empty messages
         if len(data.message) == 0:
@@ -95,7 +103,7 @@ def run():
             return
 
         # Write command execution to console
-        print('{} {} > {}'.format(datetime.now(), metadata.author, data.message))
+        print(f'{datetime.now()} {metadata.author} > {data.message}')
 
         # remove command indicator
         data.message = data.message[1:]
@@ -107,8 +115,10 @@ def run():
         try:
             commands.execute(metadata, parts)
         except Exception as e:
-            reply('error: {}'.format(e))
-            print('{} {} ! exception in command: {}'.format(datetime.now(), metadata.author, sys.exc_info()[1]))
+            reply(f'error: {e}')
+            bt = sys.exc_info()[1]
+            m=f'{datetime.now()} {metadata.author} ! exception in command: {bt}'
+            print(m)
 
     def join_callback(data):
         """Called when a user joins the server."""
@@ -118,26 +128,34 @@ def run():
         print(f'{datetime.now()} > {data.get_property("name")} joined')
 
         # check if user has greeting
-        c.execute('SELECT * FROM greetings WHERE username=?', [data.get_property('name')])
+        c.execute('SELECT * FROM greetings WHERE username=?',
+                  [data.get_property('name')])
+
         res = c.fetchone()
 
         if res is not None:
             try:
                 util.play_sound_or_alias(res[1])
             except Exception as e:
-                data.send_text_message('Error in greeting: {0}'.format(str(e)))
+                data.send_text_message(f'Error in greeting: {str(e)}')
         else:
             # No greeting, play random sound
             try:
                 target = db.random_sound()
                 util.play_sound_or_alias(target)
-                data.send_text_message('Random greeting: {0} (!greeting to update)'.format(target))
+
+                m = f'Random greeting: {target} (!greeting to update)'
+                data.send_text_message(m)
+
             except Exception as e:
-                data.send_text_message('Unexpected greeting failure: {0}'.format(str(e)))
+                m = f'Unexpected greeting failure: {str(e)}'
+                data.send_text_message(m)
 
     # Bind connection callbacks
-    conn.callbacks.add_callback(pymumble.constants.PYMUMBLE_CLBK_TEXTMESSAGERECEIVED, message_callback)
-    conn.callbacks.add_callback(pymumble.constants.PYMUMBLE_CLBK_USERCREATED, join_callback)
+    conn.callbacks.add_callback(PYMUMBLE_CLBK_TEXTMESSAGERECEIVED,
+                                message_callback)
+
+    conn.callbacks.add_callback(PYMUMBLE_CLBK_USERCREATED, join_callback)
 
     # Start audio thread
     audio.start(conn)
@@ -168,7 +186,7 @@ def run():
             try:
                 commands.execute(metadata, inp)
             except Exception as e:
-                print('Error: {}'.format(e))
+                print(f'Error: {e}')
 
         conn.my_channel().send_text_message(inp_raw)
 
