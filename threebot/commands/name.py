@@ -1,6 +1,6 @@
 # Alias shorthand.
 
-desc = "Creates an alias for a specific sound, or the last sound grabbed by the caller."
+desc = "Aliases a recent grabbed song, or by name."
 usage = "name <NAME> [SOUND]"
 
 def execute(data, argv):
