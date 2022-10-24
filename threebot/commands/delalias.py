@@ -12,10 +12,10 @@ def execute(data, argv):
     res = data.db.resolve_alias(argv[0])
 
     if res is None:
-        raise Exception('"{0}": alias not found'.format(argv[0]))
+        raise Exception('"{argv[0]}": alias not found')
     else:
         c = data.db.conn.cursor()
         c.execute('DELETE FROM aliases WHERE commandname=?', [argv[0]])
         data.db.conn.commit()
 
-        data.reply('Deleted alias "{0}".'.format(argv[0]))
+        data.reply(f'Deleted alias "{argv[0]}".')
