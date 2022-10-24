@@ -17,11 +17,13 @@ def execute(data, argv):
     res = c.fetchall()
 
     if len(res) == 0:
-        c.execute('INSERT INTO groups VALUES (?, ?, ?, datetime("NOW"))', [argv[0], argv[1], data.author])
+        c.execute('INSERT INTO groups VALUES (?, ?, ?, datetime("NOW"))'
+                  (argv[0], argv[1], data.author))
         data.db.conn.commit()
         data.reply('Created new group {}'.format(argv[0]))
     else:
         new_content = ':'.join(res[0][0].split(':') + [argv[1]])
-        c.execute('UPDATE groups SET content=? WHERE groupname=?', [new_content, argv[0]])
+        c.execute('UPDATE groups SET content=? WHERE groupname=?', 
+                  [new_content, argv[0]])
         data.db.conn.commit()
         data.reply('Added {} to group {}.'.format(argv[1], argv[0]))
