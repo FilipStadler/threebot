@@ -1,10 +1,11 @@
-# Connection audio controller.
+# Audio controller.
 
 import os
 import pyaudio
 import subprocess as sp
 import threading
 
+# Audio data format
 CHUNK=1024
 FORMAT=pyaudio.paInt16
 CHANNELS = 2
@@ -13,17 +14,26 @@ RATE = 48000
 audio_thread_running = False
 audio_thread_obj = None
 
+# Sound history buffer. history[0] points to the most recently played sound.
 history = []
 HISTORY_LEN = 6
 
 def audio_thread(mumble_conn):
+    """Audio stream. This method is run on a separate thread and continuously
+       reads audio data from the microphone and writes it to the Mumble server.
+       """
     global audio_thread_running
     audio_thread_running = True
 
     # Open the pulse fifo stream and send chunks to the server as they come through.
     
     p = pyaudio.PyAudio()
-    stream = p.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK)
+
+    stream = p.open(format=FORMAT,
+                    channels=CHANNELS,
+                    rate=RATE,
+                    input=True,
+                    frames_per_buffer=CHUNK)
 
     while audio_thread_running:
         # don't add zero chunks
@@ -38,6 +48,7 @@ def audio_thread(mumble_conn):
             mumble_conn.sound_output.add_sound(chunk)
 
 def start(mumble_conn):
+    """Launches the audio thread."""
     global audio_thread_running
     global audio_thread_obj
 
@@ -49,6 +60,7 @@ def start(mumble_conn):
     print('Started audio thread.')
 
 def stop():
+    """Terminates the audio thread."""
     global audio_thread_running
     global audio_thread_obj
 
@@ -62,6 +74,9 @@ def stop():
     print('Joined audio thread.')
 
 def play(code, mods=[]):
+    """Plays a sound with zero or more modifiers applied. May use mpg123
+       or ffmpeg to play the sound depending on whether any modifiers are
+       present."""
     filepath = 'sounds/%s.mp3' % code
 
     history.insert(0, code)
