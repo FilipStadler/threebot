@@ -31,6 +31,8 @@ parser.add_argument('--pw', default=PASS, help='Connection password')
 args = parser.parse_args()
 
 def run():
+    """Starts the bot. Connects to the server and spawns threads."""
+
     # Connect to server.
     print('Connecting to {0}:{1} as {2}'.format(args.host, args.port, args.name))
 
@@ -42,6 +44,8 @@ def run():
     print('Connected!')
 
     def message_callback(data):
+        """Called when a message is sent to the channel."""
+
         # define reply helper
         def reply(msg):
             conn.users[data.actor].send_text_message(msg)
