@@ -62,6 +62,8 @@ command_dict['help'].desc = 'Gets help information on one or more commands.'
 command_dict['help'].execute = execute_help
 
 def execute(data, argv, depth=0):
+    """Executes a command."""
+
     if depth > MAX_DEPTH:
         raise Exception('maximum command depth exceeded')
 
