@@ -11,7 +11,7 @@ def execute(data, argv):
     if len(argv) < 1:
         raise Exception('expected argument')
 
-    if os.path.exists('sounds/{0}.mp3'.format(argv[0])):
+    if os.path.exists(f'sounds/{argv[0]}.mp3'):
         c = data.db.conn.cursor()
         c.execute('DELETE FROM sounds WHERE soundname=?', [argv[0]])
         data.db.conn.commit()
@@ -19,4 +19,4 @@ def execute(data, argv):
         os.unlink('sounds/{0}.mp3'.format(argv[0]))
         data.reply('Deleted sound {0}.'.format(argv[0]))
     else:
-        raise Exception('"{0}": sound not found'.format(argv[0]))
+        raise Exception(f'"{argv[0]}": sound not found')
