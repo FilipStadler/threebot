@@ -14,9 +14,11 @@ def execute(data, argv):
         c.execute('SELECT * FROM greetings WHERE username=?', [data.author])
 
         if len(res) == 0:
-            c.execute('INSERT INTO greetings VALUES (?, ?)', [data.author, argv[0]])
+            param = (data.author, argv[0])
+            c.execute('INSERT INTO greetings VALUES (?, ?)', param)
         else:
-            c.execute('UPDATE greetings SET greeting=? WHERE username=?', [argv[0], data.author])
+            param = (argv[0], data.author)
+            c.execute('UPDATE greetings SET greeting=? WHERE username=?', param)
 
         data.reply('Set greeting to {0}.'.format(argv[0]))
     else:
