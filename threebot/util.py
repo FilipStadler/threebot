@@ -4,6 +4,8 @@ from . import audio
 from . import db
 
 def set_bind(author, name):
+    """Set's <author>'s bind to <name>. Name must be a valid sound code
+       or alias."""
     c = db.conn.cursor()
 
     # verify the bind is a valid sound
