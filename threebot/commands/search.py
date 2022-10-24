@@ -15,6 +15,9 @@ def execute(data, argv):
     # Filter out rows not matching the query
     rows = list(filter(lambda t: t[0].startswith(argv[0]), rows))
 
+    if len(rows) < 1:
+        raise Exception(f"couldn't find any aliases like '{argv[0]}'")
+
     pages = data.util.into_pages(['Alias', 'Action', 'Author', 'Created'], rows)
     page = int(argv[1]) - 1 if len(argv) > 1 else 0
 
