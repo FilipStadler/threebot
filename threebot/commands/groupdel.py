@@ -29,7 +29,9 @@ def execute(data, argv):
         new_content = ':'.join(old_content)
 
         if len(new_content) > 0:
-            c.execute('UPDATE groups SET content=? WHERE groupname=?', [new_content, argv[0]])
+            c.execute('UPDATE groups SET content=? WHERE groupname=?',
+                      [new_content, argv[0]])
+
             data.reply('Removed {} from group {}.'.format(argv[1], argv[2]))
         else:
             c.execute('DELETE FROM groups WHERE groupname=?', [argv[0]])
