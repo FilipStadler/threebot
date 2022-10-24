@@ -107,7 +107,11 @@ def run():
             print('{} {} ! exception in command: {}'.format(datetime.now(), metadata.author, sys.exc_info()[1]))
 
     def join_callback(data):
+        """Called when a user joins the server."""
         c = db.conn.cursor()
+
+        # Log join to console
+        print(f'{datetime.now()} > {data.get_property("name")} joined')
 
         # check if user has greeting
         c.execute('SELECT * FROM greetings WHERE username=?', [data.get_property('name')])
