@@ -16,7 +16,7 @@ def execute(data, argv):
             break
         else:
             if 'youtube.com' in row[1]:
-                data.bcast('A gift from <a href="{0}">{1}</a>'.format(row[1], row[0]))
+                data.bcast(f'A gift from <a href="{row[1]}">{row[0]}</a>')
                 break
             else:
                 continue
