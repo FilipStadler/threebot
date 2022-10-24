@@ -18,7 +18,7 @@ def execute(data, argv):
     res = c.fetchall()
     
     if len(res) == 0:
-        raise Exception('"{}": group not found'.format(argv[0]))
+        raise Exception(f'"{argv[0]}": group not found')
 
     mods = [] if len(argv) < 2 else argv[1:]
 
