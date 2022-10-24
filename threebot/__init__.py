@@ -1,10 +1,11 @@
 # Bot controller.
 
-import argparse
 from . import util
 from . import commands
 from . import audio
 from . import db
+
+import argparse
 import os
 import pymumble_py3 as pymumble
 import re

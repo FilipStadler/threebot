@@ -2,8 +2,8 @@
 
 import os
 import pyaudio
-import threading
 import subprocess as sp
+import threading
 
 CHUNK=1024
 FORMAT=pyaudio.paInt16
