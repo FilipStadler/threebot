@@ -5,8 +5,8 @@ usage = "blast"
 
 def execute(data, argv):
     if len(argv) > 0:
-        e = 'incorrect usage. Usage: !blast #sets last played sound to bind')
-        raise Exception(
+        e = 'incorrect usage. Usage: !blast #sets last played sound to bind'
+        raise Exception(e)
 
     target = None
     hist = data.audio.history
