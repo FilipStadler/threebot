@@ -91,21 +91,27 @@ def play(code, mods=[]):
         return sp.Popen(['mpg123', filepath], stdout=sp.DEVNULL, stderr=sp.DEVNULL)
 
     modfilters = {
-        'fast': ['scaletempo=scale=2'],
-        'slow': ['scaletempo=scale=0.65'],
-        'muffle': ['lavfi=graph=[lowpass=frequency=75,dynaudnorm=f=10:g=21:m=50]'],
+        'fast': ['atempo=2.0'],
+        'slow': ['atempo=0.65'],
+        'muffle': ['lowpass=f=200'],
+        'reverb': ['reverb', '100'],
+        'chorus': ['chorus=0.7:0.9:55:0.4:0.25:2'],
+        'bass': ['bass=g=40'],
+        'echo': ['aecho=0.8:0.9:1000:0.3'],
+        'loud': ['volume=5'],
+        'reverse': ['areverse'],
     }
 
-    args = ['mpv']
-
-    filters = ['lavfi=graph=[loudnorm]']
+    args = ['ffmpeg', '-i', filepath]
+    
+    filters=[]
 
     for m in mods:
         filters.extend(modfilters.get(m, []))
 
-    if len(filters) > 0:
-        args.append(f'--af={",".join(filters)}')
+    filters.extend(['dynaudnorm=p=1'])
+    args.extend(['-filter:a', ','.join(filters)])
+    args.extend(['-f', 'mp3', '-'])
 
-
-    args.append(filepath)
-    sp.Popen(args, stdout=sp.DEVNULL, stderr=sp.DEVNULL)
+    decoder = sp.Popen(args, stdout=sp.PIPE, stderr=sp.DEVNULL)
+    player = sp.Popen(['mpv', '-vo', 'null', '-'], stdin=decoder.stdout, stdout=sp.DEVNULL)
