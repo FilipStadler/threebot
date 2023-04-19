@@ -94,12 +94,13 @@ def play(code, mods=[]):
         'fast': ['atempo=2.0'],
         'slow': ['atempo=0.65'],
         'muffle': ['lowpass=f=200'],
-        'reverb': ['reverb', '100'],
         'chorus': ['chorus=0.7:0.9:55:0.4:0.25:2'],
         'bass': ['bass=g=40'],
-        'echo': ['aecho=0.8:0.9:1000:0.3'],
+        'echo': ['aecho=1:1:1200:0.25'],
         'loud': ['volume=5'],
         'reverse': ['areverse'],
+        'up': ['asetrate=48000*1.25,aresample=48000,atempo=1/1.25'],
+        'down': ['asetrate=48000/2,aresample=48000,atempo=2'],
     }
 
     args = ['ffmpeg', '-i', filepath]
