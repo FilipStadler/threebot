@@ -77,6 +77,13 @@ def play(code, mods=[]):
     """Plays a sound with zero or more modifiers applied. May use mpg123
        or ffmpeg to play the sound depending on whether any modifiers are
        present."""
+
+    if type(code) != str:
+        raise TypeError('play(): code must be a string')
+
+    if type(mods) != list:
+        raise TypeError('play(): mods must be a list')
+
     filepath = 'sounds/%s.mp3' % code
 
     history.insert(0, code)
