@@ -1,8 +1,7 @@
 # Custom bind command.
 
 desc = 'Plays your bind sound. Rebinds on input.'
-usage = 'bind [CODE|ALIAS]'
-
+usage = 'bind [CODE|ALIAS] [MODS]'
 def execute(data, argv):
     if len(argv) < 1:
         # search for user bind
