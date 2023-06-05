@@ -14,6 +14,7 @@ c.execute('CREATE TABLE IF NOT EXISTS sounds ( soundname TEXT UNIQUE, author TEX
 c.execute('CREATE TABLE IF NOT EXISTS greetings ( username TEXT UNIQUE, greeting TEXT )')
 c.execute('CREATE TABLE IF NOT EXISTS binds ( username TEXT UNIQUE, bind TEXT )')
 c.execute('CREATE TABLE IF NOT EXISTS groups ( groupname TEXT UNIQUE, content TEXT, author TEXT, timestamp DATETIME )')
+c.execute('CREATE TABLE IF NOT EXISTS cycles ( sound TEXT, author TEXT )')
 
 # Print some database stats.
 c = conn.cursor()
