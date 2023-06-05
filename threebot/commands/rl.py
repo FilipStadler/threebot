@@ -1,11 +1,19 @@
 # Link query command.
 
 desc = 'Retrieves a random link.'
+usage = 'rl [username]'
 
 def execute(data, argv):
-    # choose a random link
-    c = data.db.conn.cursor()
-    c.execute('SELECT * FROM links ORDER BY random() LIMIT 1')
+    if len(argv) == 0:
+        # choose a random link
+        c = data.db.conn.cursor()
+        c.execute('SELECT * FROM links ORDER BY random() LIMIT 1')
+    elif len(argv) == 1:
+        # choose a random link from a specific user
+        c = data.db.conn.cursor()
+        c.execute('SELECT * FROM links WHERE username=? ORDER BY random() LIMIT 1', [argv[0]])
+    else:
+        raise Exception('Usage: ' + usage)
 
     row = c.fetchone()
 
