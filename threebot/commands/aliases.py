@@ -18,7 +18,7 @@ def execute(data, argv):
     selected = int(argv[0]) - 1 if len(argv) > 0 else 0
 
     if selected < 0 or selected >= len(pages):
-        raise Exception(f'invalid page number {selected}, must be between 1 and {len(pages)}'
+        raise Exception(f'invalid page number {selected}, must be between 1 and {len(pages)}')
 
     data.reply('Showing page {} of {}'.format(selected + 1, len(pages)))
     data.reply(pages[selected])
