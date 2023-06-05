@@ -5,7 +5,7 @@ usage = "blast"
 
 def execute(data, argv):
     if len(argv) > 0:
-        e = 'incorrect usage. Usage: !blast #sets last played sound to bind'
+        e = 'unexpected argument! usage: !blast #sets last played sound to bind'
         raise Exception(e)
 
     target = None
