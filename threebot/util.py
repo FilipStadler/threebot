@@ -8,8 +8,10 @@ def set_bind(author, name):
        or alias."""
     c = db.conn.cursor()
 
+    base = name.split(' ')[0]
+
     # verify the bind is a valid sound
-    resolve_sound_or_alias(name)
+    resolve_sound_or_alias(base)
 
     # check if binding or rebinding
     c.execute('SELECT * FROM binds WHERE username=?', [author])
@@ -80,6 +82,6 @@ def resolve_sound_or_alias(name, check_alias=False):
     else:
         return name
 
-def play_sound_or_alias(name):
+def play_sound_or_alias(name, mods=[]):
     """Plays a sound either by code or alias."""
-    audio.play(resolve_sound_or_alias(name))
+    audio.play(resolve_sound_or_alias(name), mods)
