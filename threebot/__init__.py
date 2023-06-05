@@ -8,8 +8,8 @@ from . import db
 import argparse
 import os
 import pymumble_py3 as pymumble
-from pymumble.constants import PYMUMBLE_CLBK_USERCREATED
-from pymmuble.constants import PYMUMBLE_CLBK_TEXTMESSAGERECEIVED
+from pymumble_py3.constants import PYMUMBLE_CLBK_USERCREATED
+from pymumble_py3.constants import PYMUMBLE_CLBK_TEXTMESSAGERECEIVED
 import re
 import sys
 from datetime import datetime
