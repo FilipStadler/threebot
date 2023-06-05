@@ -19,9 +19,13 @@ history = []
 HISTORY_LEN = 6
 
 def audio_thread(mumble_conn):
-    """Audio stream. This method is run on a separate thread and continuously
-       reads audio data from the microphone and writes it to the Mumble server.
-       """
+    """Audio thread. Reads audio from the pulse fifo and sends it to the server.
+
+    Parameters
+    ----------
+    mumble_conn : Mumble
+        The mumble connection object.
+    """
     global audio_thread_running
     audio_thread_running = True
 
@@ -74,9 +78,37 @@ def stop():
     print('Joined audio thread.')
 
 def play(code, mods=[]):
-    """Plays a sound with zero or more modifiers applied. May use mpg123
-       or ffmpeg to play the sound depending on whether any modifiers are
-       present."""
+    """Plays a sound from the local collection, optionally with modifiers.
+
+    Available modifiers:
+    - fast: plays the sound at double speed
+    - slow: plays the sound at half speed
+    - muffle: mutes the sound
+    - reverse: plays the sound backwards
+    - echo: plays the sound with an echo effect
+    - up: plays the sound with a higher pitch
+    - down: plays the sound with a lower pitch
+    - chorus: plays the sound with a chorus effect
+
+    Parameters
+    ----------
+    code : str
+        The sound code to play.
+    mods : list, optional
+        The modifiers to apply to the sound, by default []
+
+    Returns
+    -------
+    sp.Process
+        The process object for the sound playback.
+
+    Raises
+    ------
+    TypeError
+        If code is not a string or mods is not a list.
+    Exception
+        If the sound file is not found.
+    """
 
     if type(code) != str:
         raise TypeError('play(): code must be a string')
@@ -123,3 +155,5 @@ def play(code, mods=[]):
 
     decoder = sp.Popen(args, stdout=sp.PIPE, stderr=sp.DEVNULL)
     player = sp.Popen(['mpv', '-vo', 'null', '-'], stdin=decoder.stdout, stdout=sp.DEVNULL)
+
+    return player
